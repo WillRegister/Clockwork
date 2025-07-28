@@ -1,0 +1,21 @@
+# General
+*.pyc
+__pycache__/
+*.pyo
+
+# Python venv
+backend/venv/
+backend/.env
+
+# Node modules
+frontend/node_modules/
+frontend/.env
+
+# Docker
+*.pid
+*.db
+/data
+/.DS_Store
+
+# Misc
+*.log

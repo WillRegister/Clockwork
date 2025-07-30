@@ -8,7 +8,7 @@ app = FastAPI()
 @app.get ("/")
 def read_root():
     try:
-        return{"hello":"world"}
+        return {"hello"}
     except Exception as e:
         return {"error": str(e)}
 

@@ -1,0 +1,77 @@
+/* Container for the calendar with a neon glow and fade-in animation */
+.calendar-container {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+  background-color: #011627;
+  padding: 2rem;
+  border-radius: 1rem;
+  box-shadow: 0 0 20px rgba(0, 217, 225, 0.4), 0 0 40px rgba(0, 217, 225, 0.2);
+  animation: fadeInUp 0.8s ease-in-out;
+}
+
+/* Fade-in and slide-up animation */
+@keyframes fadeInUp {
+  0% {
+    opacity: 0;
+    transform: translateY(20px);
+  }
+  100% {
+    opacity: 1;
+    transform: translateY(0);
+  }
+}
+
+/* Override some react-calendar styles to match the dark theme */
+.calendar {
+  width: 100%;
+  max-width: 450px;
+  background: #021a2e;
+  border: none;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 10px rgba(0, 217, 225, 0.3);
+  color: #e0e0e0;
+  padding: 1rem;
+}
+
+.calendar button {
+  margin: 0;
+  border: none;
+  outline: none;
+  background: none;
+  transition: background-color 0.3s ease, color 0.3s ease;
+  border-radius: 0.4rem;
+  padding: 0.4rem;
+}
+
+/* Day tiles styling */
+.calendar .react-calendar__tile {
+  font-size: 0.9rem;
+  border-radius: 0.4rem;
+  color: #cddaf2;
+}
+
+.calendar .react-calendar__tile--now {
+  background-color: rgba(0, 217, 225, 0.2);
+  color: #00d9e1;
+  font-weight: bold;
+}
+
+.calendar .react-calendar__tile--active {
+  background-color: rgba(0, 217, 225, 0.4);
+  color: #011627;
+  font-weight: bold;
+}
+
+.calendar .react-calendar__tile:hover {
+  background-color: rgba(0, 217, 225, 0.15);
+}
+
+.selected-date {
+  margin-top: 1rem;
+  color: #9dffe0;
+  font-weight: 500;
+  font-size: 1rem;
+  text-shadow: 0 0 6px rgba(0, 217, 225, 0.6);
+}

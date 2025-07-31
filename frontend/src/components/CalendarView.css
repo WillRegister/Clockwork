@@ -68,6 +68,31 @@
   background-color: rgba(0, 217, 225, 0.15);
 }
 
+/* Style the calendar navigation (month/year header and arrows) to match the dark theme */
+.calendar .react-calendar__navigation {
+  background-color: transparent;
+  margin-bottom: 0.5rem;
+}
+
+.calendar .react-calendar__navigation button {
+  background: none;
+  color: #00d9e1;
+  font-weight: bold;
+  border-radius: 0.4rem;
+  border: none;
+  padding: 0.3rem 0.6rem;
+  transition: background-color 0.3s ease;
+}
+
+.calendar .react-calendar__navigation button:disabled {
+  color: rgba(0, 217, 225, 0.4);
+}
+
+.calendar .react-calendar__navigation button:enabled:hover,
+.calendar .react-calendar__navigation button:enabled:focus {
+  background-color: rgba(0, 217, 225, 0.15);
+}
+
 .selected-date {
   margin-top: 1rem;
   color: #9dffe0;

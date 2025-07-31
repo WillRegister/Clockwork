@@ -1,15 +1,4 @@
 fastapi
-uvicorn[standard]         # Run the server
-httpx                     # Async HTTP requests (fetch news, astronomy data, etc)
-pydantic                  # Data validation (used by FastAPI, you’ll use it too)
-redis                     # For Redis integration (fast data/cache)
-skyfield                  # Astronomy/astrology calculations
-pandas                    # Data analysis, CSV/Excel, nutrition, etc
-numpy                     # Math, array ops (useful for everything)
-python-dotenv             # Manage environment variables/secrets
-sqlmodel                  # For future-proof DB (or use sqlalchemy if you want)
-
-# Optional/Recommended
-passlib[bcrypt]           # Password hashing, if you need users
-aiofiles                  # Async file IO (upload/downloads)
-python-multipart          # For file uploads via API
+uvicorn[standard]
+redis
+pydantic

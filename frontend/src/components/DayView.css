@@ -1,0 +1,121 @@
+/* Overlay that darkens the background and centers the day view card */
+.day-view-overlay {
+  position: fixed;
+  top: 0;
+  left: 0;
+  width: 100%;
+  height: 100%;
+  background-color: rgba(0, 0, 0, 0.7);
+  display: flex;
+  justify-content: center;
+  align-items: center;
+  z-index: 1000;
+  animation: fadeIn 0.4s ease-out;
+}
+
+@keyframes fadeIn {
+  from {
+    opacity: 0;
+  }
+  to {
+    opacity: 1;
+  }
+}
+
+.day-view {
+  background-color: #011627;
+  border-radius: 1rem;
+  padding: 1.5rem;
+  width: 90%;
+  max-width: 600px;
+  box-shadow: 0 0 30px rgba(0, 217, 225, 0.4);
+  display: flex;
+  flex-direction: column;
+}
+
+.day-view-header {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  margin-bottom: 1rem;
+}
+
+.day-view h2 {
+  margin: 0;
+  color: #00d9e1;
+  text-shadow: 0 0 10px rgba(0, 217, 225, 0.8);
+  font-size: 1.4rem;
+}
+
+.hour-list {
+  display: flex;
+  flex-direction: column;
+  gap: 0.6rem;
+  max-height: 60vh;
+  overflow-y: auto;
+}
+
+.hour-row {
+  display: flex;
+  align-items: flex-start;
+  gap: 0.5rem;
+  background-color: #021a2e;
+  padding: 0.6rem;
+  border-radius: 0.5rem;
+  box-shadow: 0 0 10px rgba(0, 217, 225, 0.2);
+}
+
+.hour-label {
+  width: 3rem;
+  font-weight: bold;
+  color: #00d9e1;
+  flex-shrink: 0;
+}
+
+.mood-input {
+  width: 3rem;
+  border: none;
+  border-radius: 0.3rem;
+  background: #011627;
+  color: #00d9e1;
+  text-align: center;
+  font-size: 0.9rem;
+  padding: 0.2rem;
+}
+
+.notes-input {
+  flex: 1;
+  min-height: 3rem;
+  border: none;
+  border-radius: 0.3rem;
+  background: #011627;
+  color: #cddaf2;
+  padding: 0.4rem;
+  font-size: 0.85rem;
+  resize: vertical;
+}
+
+.status-dot {
+  width: 0.8rem;
+  height: 0.8rem;
+  border-radius: 50%;
+  margin-left: 0.5rem;
+  align-self: center;
+  flex-shrink: 0;
+}
+
+.status-dot.saved {
+  background-color: #00ff9d;
+  box-shadow: 0 0 6px #00ff9d;
+}
+
+.status-dot.saving {
+  background-color: #ffc400;
+  box-shadow: 0 0 6px #ffc400;
+}
+
+.status-dot.dirty,
+.status-dot.error {
+  background-color: #ff355e;
+  box-shadow: 0 0 6px #ff355e;
+}

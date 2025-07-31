@@ -1,4 +1,4 @@
-from fastapi import FastAPI, HTTPException
+from fastapi import FastAPI, HTTPException, Query
 from pydantic import BaseModel
 from typing import List, Optional
 from datetime import date
@@ -27,17 +27,17 @@ class DayHourUpdate(BaseModel):
 
 
 @app.get("/api/day", response_model=List[HourEntry])
-def get_day_view(date: str):
+def get_day_view(date_str: str = Query(..., alias="date")):
     """
     Return a list of 24 HourEntry objects for the given date.
     If an hour has no stored data, mood and notes will be None.
     """
     try:
         # Validate date format
-        date_obj = date.fromisoformat(date)
+        date_obj = date.fromisoformat(date_str)
     except ValueError:
         raise HTTPException(status_code=400, detail="Invalid date format, expected YYYY-MM-DD")
-    key = f"day:{date}"
+    key = f"day:{date_str}"
     entries = r.hgetall(key)
     result: List[HourEntry] = []
     for hour in range(24):

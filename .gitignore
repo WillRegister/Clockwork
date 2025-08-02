@@ -2,7 +2,7 @@
 *.pyc
 __pycache__/
 *.pyo
-
+backend/__pycache__/
 # Python venv
 backend/venv/
 backend/.env

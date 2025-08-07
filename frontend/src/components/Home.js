@@ -85,7 +85,7 @@ const Home = ({ onNavigate }) => {
         pillars.push(pillar1); // Add pillar to the array
 
         const pillar2 = new THREE.Mesh(geometry, material);
-        pillar2.position.x = 8;
+        pillar2.position.x = 7.5;
         scene.add(pillar2);
         pillars.push(pillar2); // Add pillar to the array
     };
@@ -93,11 +93,11 @@ const Home = ({ onNavigate }) => {
     const createSphereButton = () => {
         const geometry = new THREE.SphereGeometry(1.5, 32, 32);
         const material = new THREE.MeshStandardMaterial({
-            color: 0x00d9e1,
-            emissive: 0x39ff14,
-            emissiveIntensity: 0.5,
+            color: new THREE.Color("#008B8B"),
+            emissive: new THREE.Color("#008B8B"),
+            emissiveIntensity: 0.3,
             metalness: 0.8,
-            roughness: 0.2,
+            roughness: 0.1,
         });
         sphereButton = new THREE.Mesh(geometry, material);
         sphereButton.name = "enter_button";
@@ -145,14 +145,17 @@ const Home = ({ onNavigate }) => {
     window.addEventListener('resize', onWindowResize);
     window.addEventListener('click', onMouseClick);
 
-    // Cleanup function to run when the component unmounts
+    // Store stable reference to container element
+    const containerEl = threeContainerRef.current;
+
+    // Cleanup function
     return () => {
       window.removeEventListener('resize', onWindowResize);
       window.removeEventListener('click', onMouseClick);
       cancelAnimationFrame(threeAnimationId.current);
       cancelAnimationFrame(matrixAnimationId.current);
-      if (renderer && renderer.domElement && threeContainerRef.current) {
-        threeContainerRef.current.removeChild(renderer.domElement);
+      if (renderer && renderer.domElement && containerEl) {
+        containerEl.removeChild(renderer.domElement);
       }
     };
   }, [onNavigate]); // Re-run effect if onNavigate changes
@@ -162,8 +165,8 @@ const Home = ({ onNavigate }) => {
       <canvas ref={matrixCanvasRef} id="matrix-canvas" />
       <div ref={threeContainerRef} id="three-container" />
       <div className="home-content">
-        <h1 className="main-title">CLOCKWORK</h1>
-        <p className="subtitle">Click the orb to enter</p>
+        <h1 className="main-title">  CLOCKWORK</h1>
+        <p className="subtitle">Enter</p>
       </div>
     </div>
   );

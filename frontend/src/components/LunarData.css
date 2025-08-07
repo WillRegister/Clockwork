@@ -1,0 +1,15 @@
+.mood-and-lunar-container {
+  display: flex;
+  flex-direction: column;
+  margin-right: 1rem;
+}
+
+.lunar-data {
+  font-size: 0.8rem;
+  color: #666;
+  margin-top: 0.5rem;
+}
+
+.lunar-data p {
+  margin: 0;
+}

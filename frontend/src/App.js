@@ -1,37 +1,56 @@
 import React, { useState } from 'react';
 import CalendarView from './components/CalendarView';
 import DayView from './components/DayView';
+import FoodSearch from './components/FoodSearch';
+import Home from './components/Home'; // Import the new Home component
 import './App.css';
 
 /**
  * The root component of the Clockwork application.
- * It renders a header and the main calendar view. More sections can be added
- * later (e.g. navigation, settings, etc.).
+ * It now uses the immersive Home component as the entry point and
+ * handles navigation to other views.
  */
 function App() {
-  // State to hold the currently selected date for day view (null means no day view)
   const [selectedDate, setSelectedDate] = useState(null);
+  const [currentView, setCurrentView] = useState('home'); // 'home', 'calendar', or 'food'
 
-  // Callback passed to CalendarView to open the day view
   const handleDateSelect = (date) => {
     setSelectedDate(date);
   };
 
-  // Close the day view
   const closeDayView = () => {
     setSelectedDate(null);
   };
 
+  const renderView = () => {
+    switch (currentView) {
+      case 'calendar':
+        return <CalendarView onDateSelect={handleDateSelect} />;
+      case 'food':
+        return <FoodSearch />;
+      case 'home':
+      default:
+        // The Home component takes a function to handle navigation
+        return <Home onNavigate={setCurrentView} />;
+    }
+  };
+
   return (
     <div className="App">
-      <header className="app-header">
-        <h1>Clockwork Calendar</h1>
-      </header>
+      {/* Conditionally render the header so it doesn't show on the home screen */}
+      {currentView !== 'home' && (
+        <header className="app-header">
+          <h1 onClick={() => setCurrentView('home')} style={{cursor: 'pointer'}}>CLOCKWORK</h1>
+          <nav>
+            <button className="nav-link" onClick={() => setCurrentView('calendar')}>Calendar</button>
+            <button className="nav-link" onClick={() => setCurrentView('food')}>Recipe Builder</button>
+          </nav>
+        </header>
+      )}
       <main className="app-main">
-        {/* Render the month calendar and pass date select handler */}
-        <CalendarView onDateSelect={handleDateSelect} />
-        {/* Conditionally render the day view overlay when a date is selected */}
-        {selectedDate && (
+        {renderView()}
+        {/* The DayView overlay is only relevant for the calendar view */}
+        {selectedDate && currentView === 'calendar' && (
           <DayView date={selectedDate} onClose={closeDayView} />
         )}
       </main>

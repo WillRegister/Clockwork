@@ -4,9 +4,10 @@
   "private": true,
   "dependencies": {
     "react": "^19.1.1",
+    "react-calendar": "^6.0.0",
     "react-dom": "^19.1.1",
     "react-scripts": "5.0.1",
-    "react-calendar": "^6.0.0"
+    "three": "^0.179.1"
   },
   "scripts": {
     "start": "react-scripts start",
@@ -31,7 +32,6 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
-  }
-  ,
+  },
   "proxy": "http://backend:8000"
 }

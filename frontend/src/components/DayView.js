@@ -1,6 +1,26 @@
 import React, { useState, useEffect, useRef } from 'react';
 import CustomButton from './CustomButton';
 import './DayView.css';
+import './LunarData.css';
+import moonData from './moon_data.json';
+
+/**
+ * Finds the lunar data for a specific date and hour.
+ * @param {Date} date - The date to find lunar data for.
+ * @param {number} hour - The hour to find lunar data for.
+ * @returns {object|null} The lunar data object or null if not found.
+ */
+const findLunarData = (date, hour) => {
+  const isoString = new Date(
+    date.getFullYear(),
+    date.getMonth(),
+    date.getDate(),
+    hour
+  )
+    .toISOString()
+    .slice(0, 13);
+  return moonData.find((entry) => entry.datetime.startsWith(isoString));
+};
 
 /**
  * DayView displays 24 hour blocks for a given date. Each block allows the user
@@ -9,8 +29,8 @@ import './DayView.css';
  * hour: green (saved), yellow (saving), red (dirty/error).
  *
  * Props:
- *  - date: a Date object for the day to display
- *  - onClose: function called when the user clicks the back button
+ * - date: a Date object for the day to display
+ * - onClose: function called when the user clicks the back button
  */
 const DayView = ({ date, onClose }) => {
   // State holds an array of hour entries (0–23) with mood, notes and status
@@ -29,86 +49,74 @@ const DayView = ({ date, onClose }) => {
         }
         const data = await res.json();
         // Extend with status field for UI feedback
-        const extended = data.map((entry) => ({ ...entry, status: 'saved' }));
+        const extended = data.map((entry) => ({
+          ...entry,
+          status: 'saved',
+          lunarData: findLunarData(date, entry.hour),
+        }));
         setHours(extended);
       } catch (err) {
         console.error('Failed to load day data', err);
-        // Fallback: create 24 empty hour entries so the UI still renders
-        const fallback = Array.from({ length: 24 }, (_, hour) => ({
-          hour,
+        // Fallback: create 24 empty hours
+        const fallbackHours = Array.from({ length: 24 }, (_, i) => ({
+          hour: i,
           mood: null,
           notes: '',
-          status: 'saved',
+          status: 'new',
+          lunarData: findLunarData(date, i),
         }));
-        setHours(fallback);
+        setHours(fallbackHours);
       }
     }
     fetchDayData();
-    // Cleanup any pending timeouts when unmounting or switching days
-    return () => {
-      Object.values(saveTimeouts.current).forEach((timeoutId) => clearTimeout(timeoutId));
-      saveTimeouts.current = {};
-    };
   }, [date]);
 
-  /**
-   * Schedule a save operation for the given hour. This debounces rapid edits
-   * so that a save is only triggered after the user stops typing for
-   * approximately 800ms.
-   */
+  // Debounced save function
   const scheduleSave = (hour) => {
     // Clear any existing timeout for this hour
     if (saveTimeouts.current[hour]) {
       clearTimeout(saveTimeouts.current[hour]);
     }
+
     // Set a new timeout
     saveTimeouts.current[hour] = setTimeout(() => {
-      saveHour(hour);
-    }, 800);
-  };
-
-  /**
-   * Persist a single hour entry to the backend. Updates the status indicator
-   * accordingly.
-   */
-  const saveHour = async (hour) => {
-    const isoDate = date.toISOString().split('T')[0];
-    const hourEntry = hours.find((h) => h.hour === hour);
-    // Update status to saving
-    setHours((prev) =>
-      prev.map((h) => (h.hour === hour ? { ...h, status: 'saving' } : h))
-    );
-    try {
-      const res = await fetch('/api/day', {
-        method: 'POST',
-        headers: { 'Content-Type': 'application/json' },
-        body: JSON.stringify({
-          date: isoDate,
-          hour: hour,
-          mood: hourEntry.mood || null,
-          notes: hourEntry.notes || null,
-        }),
-      });
-      if (res.ok) {
+      const entry = hours.find((h) => h.hour === hour);
+      if (entry) {
+        // Optimistically set status to 'saving'
         setHours((prev) =>
-          prev.map((h) => (h.hour === hour ? { ...h, status: 'saved' } : h))
+          prev.map((h) => (h.hour === hour ? { ...h, status: 'saving' } : h))
         );
-      } else {
-        setHours((prev) =>
-          prev.map((h) => (h.hour === hour ? { ...h, status: 'error' } : h))
-        );
+        const isoDate = date.toISOString().split('T')[0];
+        fetch('/api/day', {
+          method: 'POST',
+          headers: { 'Content-Type': 'application/json' },
+          body: JSON.stringify({
+            date: isoDate,
+            hour: entry.hour,
+            mood: entry.mood,
+            notes: entry.notes,
+          }),
+        })
+          .then((res) => {
+            if (!res.ok) throw new Error('Save failed');
+            setHours((prev) =>
+              prev.map((h) =>
+                h.hour === hour ? { ...h, status: 'saved' } : h
+              )
+            );
+          })
+          .catch(() => {
+            setHours((prev) =>
+              prev.map((h) =>
+                h.hour === hour ? { ...h, status: 'error' } : h
+              )
+            );
+          });
       }
-    } catch (err) {
-      console.error('Save failed', err);
-      setHours((prev) =>
-        prev.map((h) => (h.hour === hour ? { ...h, status: 'error' } : h))
-      );
-    }
+    }, 1500); // 1.5 second delay
   };
 
-  /**
-   * Handle changes to mood or notes. Updates local state and schedules a save.
-   */
+  // Update state on input change and schedule a save
   const handleChange = (hour, field, value) => {
     setHours((prev) =>
       prev.map((h) =>
@@ -134,21 +142,31 @@ const DayView = ({ date, onClose }) => {
               <span className="hour-label">
                 {String(h.hour).padStart(2, '0')}:00
               </span>
-              <input
-                type="number"
-                min="1"
-                max="10"
-                placeholder="Mood"
-                value={h.mood ?? ''}
-                onChange={(e) =>
-                  handleChange(
-                    h.hour,
-                    'mood',
-                    e.target.value ? parseInt(e.target.value) : ''
-                  )
-                }
-                className="mood-input"
-              />
+              <div className="mood-and-lunar-container">
+                <input
+                  type="number"
+                  min="1"
+                  max="10"
+                  placeholder="Mood"
+                  value={h.mood ?? ''}
+                  onChange={(e) =>
+                    handleChange(
+                      h.hour,
+                      'mood',
+                      e.target.value ? parseInt(e.target.value) : ''
+                    )
+                  }
+                  className="mood-input"
+                />
+                {h.lunarData && (
+                  <div className="lunar-data">
+                    <p>Illumination: {Math.trunc(h.lunarData.illumination)}%</p>
+                    <p>Phase: {h.lunarData.waxing_waning}</p>
+                    <p>Distance: {`${Math.trunc(h.lunarData.distance_km).toLocaleString()} km`}</p>
+                    <p>Approaching: {h.lunarData.approaching}</p>
+                  </div>
+                )}
+              </div>
               <textarea
                 placeholder="Notes..."
                 value={h.notes ?? ''}

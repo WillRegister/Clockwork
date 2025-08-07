@@ -1,0 +1,110 @@
+/* Main container for the food search component */
+.food-search-container {
+  width: 100%;
+  max-width: 900px;
+  margin: 2rem auto;
+  padding: 2rem;
+  background-color: #011627;
+  border-radius: 1rem;
+  box-shadow: 0 0 20px rgba(0, 217, 225, 0.4);
+  color: #e0e0e0;
+  font-family: 'Orbitron', sans-serif;
+}
+
+/* Styling for the search bar and its suggestions */
+.search-wrapper {
+  position: relative;
+  margin-bottom: 2rem;
+}
+
+.search-bar {
+  width: 100%;
+  padding: 0.8rem 1rem;
+  font-size: 1rem;
+  background-color: #021a2e;
+  border: 2px solid #00d9e1;
+  border-radius: 0.5rem;
+  color: #39ff14; /* Matrix Green */
+  outline: none;
+  transition: box-shadow 0.3s ease;
+}
+
+.search-bar:focus {
+  box-shadow: 0 0 12px #00d9e1, 0 0 24px #00d9e1;
+}
+
+.suggestions-list {
+  position: absolute;
+  width: 100%;
+  background-color: #021a2e;
+  border: 1px solid #00d9e1;
+  border-top: none;
+  border-radius: 0 0 0.5rem 0.5rem;
+  list-style: none;
+  padding: 0;
+  margin: 0;
+  z-index: 10;
+  max-height: 200px;
+  overflow-y: auto;
+}
+
+.suggestions-list li {
+  padding: 0.8rem 1rem;
+  cursor: pointer;
+  color: #cddaf2;
+  transition: background-color 0.2s ease;
+}
+
+.suggestions-list li:hover {
+  background-color: rgba(0, 217, 225, 0.15);
+  color: #00d9e1;
+}
+
+/* Layout for the recipe details (food list and totals) */
+.recipe-section {
+  display: flex;
+  justify-content: space-between;
+  gap: 2rem;
+  margin-bottom: 2rem;
+}
+
+.food-list, .totals-list {
+  flex: 1;
+  background: #021a2e;
+  padding: 1.5rem;
+  border-radius: 0.5rem;
+  border: 1px solid rgba(0, 217, 225, 0.3);
+  max-height: 400px;
+  overflow-y: auto;
+}
+
+.food-list ul, .totals-list ul {
+  list-style: none;
+  padding: 0;
+}
+
+.food-list li, .totals-list li {
+  padding: 0.5rem 0;
+  border-bottom: 1px solid #011627;
+}
+
+.totals-list strong {
+  color: #00d9e1;
+}
+
+/* Section for saving the recipe */
+.save-recipe-section {
+  display: flex;
+  gap: 1rem;
+  align-items: center;
+}
+
+.recipe-name-input {
+  flex-grow: 1;
+  padding: 0.6rem 1rem;
+  background-color: #021a2e;
+  border: 2px solid #00d9e1;
+  border-radius: 0.5rem;
+  color: #39ff14;
+  outline: none;
+}

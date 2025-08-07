@@ -1,16 +1,122 @@
-/* Overlay that darkens the background and centers the day view card */
+/* Dark Theme for Day View */
 .day-view-overlay {
   position: fixed;
   top: 0;
   left: 0;
   width: 100%;
   height: 100%;
-  background-color: rgba(0, 0, 0, 0.7);
+  background-color: rgba(0, 0, 0, 0.8);
   display: flex;
   justify-content: center;
   align-items: center;
   z-index: 1000;
-  animation: fadeIn 0.4s ease-out;
+  animation: fadeIn 0.3s ease-out;
+}
+
+.day-view {
+  background: #1a1a1a;
+  color: #e0e0e0;
+  padding: 2rem;
+  border-radius: 8px;
+  border: 1px solid #00ffff;
+  box-shadow: 0 4px 25px rgba(0, 255, 255, 0.2);
+  width: 90%;
+  max-width: 800px;
+  height: 90vh;
+  display: flex;
+  flex-direction: column;
+}
+
+.day-view-header {
+  display: flex;
+  justify-content: space-between;
+  align-items: center;
+  border-bottom: 1px solid #333;
+  padding-bottom: 1rem;
+  color: #00ffff; /* Cyan for the header text */
+}
+
+.hour-list {
+  overflow-y: auto;
+  flex-grow: 1;
+}
+
+/* Custom scrollbar for webkit browsers */
+.hour-list::-webkit-scrollbar {
+  width: 8px;
+}
+
+.hour-list::-webkit-scrollbar-track {
+  background: #1a1a1a;
+}
+
+.hour-list::-webkit-scrollbar-thumb {
+  background-color: #00ffff;
+  border-radius: 4px;
+}
+
+
+.hour-row {
+  display: flex;
+  align-items: center;
+  padding: 1rem 0;
+  border-bottom: 1px solid #333;
+}
+
+.hour-label {
+  font-weight: bold;
+  margin-right: 1rem;
+  width: 50px;
+  color: #00ffff; /* Cyan for the hour label */
+}
+
+.mood-input, .notes-input {
+  background-color: #2a2a2a;
+  color: #39ff14; /* Matrix Green for text */
+  border: 1px solid #444;
+  border-radius: 4px;
+  padding: 0.5rem;
+}
+
+.mood-input:focus, .notes-input:focus {
+  outline: none;
+  border-color: #00ffff; /* Cyan focus border */
+  box-shadow: 0 0 5px rgba(0, 255, 255, 0.5);
+}
+
+.mood-input {
+  width: 80px;
+  margin-right: 1rem;
+}
+
+.notes-input {
+  flex-grow: 1;
+  resize: vertical;
+  min-height: 40px;
+}
+
+.status-dot {
+  width: 12px;
+  height: 12px;
+  border-radius: 50%;
+  margin-left: 1rem;
+}
+
+.status-dot.new {
+  background-color: #555;
+}
+.status-dot.dirty {
+  background-color: #f0ad4e;
+}
+.status-dot.saving {
+  background-color: #f0ad4e;
+  animation: pulse 1.5s infinite;
+}
+.status-dot.saved {
+  background-color: #00ff41; /* Matrix Green */
+}
+.status-dot.error {
+  background-color: #d9534f;
 }
 
 @keyframes fadeIn {
@@ -22,100 +128,17 @@
   }
 }
 
-.day-view {
-  background-color: #011627;
-  border-radius: 1rem;
-  padding: 1.5rem;
-  width: 90%;
-  max-width: 600px;
-  box-shadow: 0 0 30px rgba(0, 217, 225, 0.4);
-  display: flex;
-  flex-direction: column;
-}
-
-.day-view-header {
-  display: flex;
-  flex-direction: column;
-  align-items: center;
-  margin-bottom: 1rem;
-}
-
-.day-view h2 {
-  margin: 0;
-  color: #00d9e1;
-  text-shadow: 0 0 10px rgba(0, 217, 225, 0.8);
-  font-size: 1.4rem;
-}
-
-.hour-list {
-  display: flex;
-  flex-direction: column;
-  gap: 0.6rem;
-  max-height: 60vh;
-  overflow-y: auto;
-}
-
-.hour-row {
-  display: flex;
-  align-items: flex-start;
-  gap: 0.5rem;
-  background-color: #021a2e;
-  padding: 0.6rem;
-  border-radius: 0.5rem;
-  box-shadow: 0 0 10px rgba(0, 217, 225, 0.2);
-}
-
-.hour-label {
-  width: 3rem;
-  font-weight: bold;
-  color: #00d9e1;
-  flex-shrink: 0;
-}
-
-.mood-input {
-  width: 3rem;
-  border: none;
-  border-radius: 0.3rem;
-  background: #011627;
-  color: #00d9e1;
-  text-align: center;
-  font-size: 0.9rem;
-  padding: 0.2rem;
-}
-
-.notes-input {
-  flex: 1;
-  min-height: 3rem;
-  border: none;
-  border-radius: 0.3rem;
-  background: #011627;
-  color: #cddaf2;
-  padding: 0.4rem;
-  font-size: 0.85rem;
-  resize: vertical;
-}
-
-.status-dot {
-  width: 0.8rem;
-  height: 0.8rem;
-  border-radius: 50%;
-  margin-left: 0.5rem;
-  align-self: center;
-  flex-shrink: 0;
-}
-
-.status-dot.saved {
-  background-color: #00ff9d;
-  box-shadow: 0 0 6px #00ff9d;
-}
-
-.status-dot.saving {
-  background-color: #ffc400;
-  box-shadow: 0 0 6px #ffc400;
-}
-
-.status-dot.dirty,
-.status-dot.error {
-  background-color: #ff355e;
-  box-shadow: 0 0 6px #ff355e;
+@keyframes pulse {
+  0% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
+  50% {
+    transform: scale(1.2);
+    opacity: 1;
+  }
+  100% {
+    transform: scale(1);
+    opacity: 0.7;
+  }
 }

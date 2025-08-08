@@ -1,6 +1,6 @@
 /* Styles for the Home component, ensuring it's a full-screen overlay */
 .home-container {
-  position: fixed;
+  position: absolute;
   top: 0;
   left: 0;
   width: 100%;
